@@ -12,14 +12,16 @@ class TestCreateOrder:
             login_resp = requests.post(Data.LOGIN_USER, json={"email": login_pass[0], "password": login_pass[1]})
         payload = {"ingredients": ["61c0c5a71d1f82001bdaaa6d", "61c0c5a71d1f82001bdaaa6f"]}
         headers = {"Authorization": login_resp.json().get('accessToken')}
-        response = requests.post(Data.CREATE_ORDER, json=payload, headers=headers)
+        with allure.step('Попытка создания заказа с авторизацией'):
+            response = requests.post(Data.CREATE_ORDER, json=payload, headers=headers)
         assert response.status_code == 200
         assert response.json()["success"] is True
 
     @allure.title("Создание заказа без авторизации")
     def test_create_order_without_login(self):
         payload = {"ingredients": ["61c0c5a71d1f82001bdaaa6d", "61c0c5a71d1f82001bdaaa6f"]}
-        response = requests.post(Data.CREATE_ORDER, json=payload)
+        with allure.step('Попытка создания заказа без авторизации'):
+            response = requests.post(Data.CREATE_ORDER, json=payload)
         assert response.status_code == 401
         assert response.json()["success"] is False
 
@@ -31,7 +33,8 @@ class TestCreateOrder:
             login_resp = requests.post(Data.LOGIN_USER, json={"email": login_pass[0], "password": login_pass[1]})
         payload = {"ingredients": ["61c0c5a71d1f82001bdaaa6d", "61c0c5a71d1f82001bdaaa6f"]}
         headers = {"Authorization": login_resp.json().get('accessToken')}
-        response = requests.post(Data.CREATE_ORDER, json=payload, headers=headers)
+        with allure.step('Попытка создания заказа с ингредиентами'):
+            response = requests.post(Data.CREATE_ORDER, json=payload, headers=headers)
         assert response.status_code == 200
         assert response.json()["success"] is True
 
@@ -43,7 +46,8 @@ class TestCreateOrder:
             login_resp = requests.post(Data.LOGIN_USER, json={"email": login_pass[0], "password": login_pass[1]})
         payload = {"ingredients": []}
         headers = {"Authorization": login_resp.json().get('accessToken')}
-        response = requests.post(Data.CREATE_ORDER, json=payload, headers=headers)
+        with allure.step('Попытка создания заказа без ингредиентов'):
+            response = requests.post(Data.CREATE_ORDER, json=payload, headers=headers)
         assert response.status_code == 400
         assert response.json()["success"] is False
 
@@ -55,6 +59,7 @@ class TestCreateOrder:
             login_resp = requests.post(Data.LOGIN_USER, json={"email": login_pass[0], "password": login_pass[1]})
         payload = {"ingredients": ['invalid_hash']}
         headers = {"Authorization": login_resp.json().get('accessToken')}
-        response = requests.post(Data.CREATE_ORDER, json=payload, headers=headers)
+        with allure.step('Попытка создания заказа с неверным хешем'):
+            response = requests.post(Data.CREATE_ORDER, json=payload, headers=headers)
         assert response.status_code == 400
         assert response.json()["success"] is False

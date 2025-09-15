@@ -28,6 +28,5 @@ class TestCreateUser:
     def test_create_user_missing_fields_fails(self, payload):
         with allure.step('Создание пользователя'):
             response = requests.post(Data.CREATE_USER, data=payload)
-        print(response.text)
         assert response.status_code == 403
         assert "Email, password and name are required fields" == response.json().get('message')

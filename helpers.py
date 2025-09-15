@@ -25,7 +25,6 @@ def register_new_user_and_return_login_password():
     }
 
     response = requests.post(Data.CREATE_USER, data=payload)
-    print(response)
     if response.ok:
         login_pass.append(login)
         login_pass.append(password)
